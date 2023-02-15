@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Mill5C.View.Window.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CutterRendererType" Type="Mill5C.View.Window.Settings.CutterRendererType" Scope="User">
+      <Value Profile="(Default)">Standard</Value>
+    </Setting>
+    <Setting Name="MaterialRendererType" Type="Mill5C.View.Window.Settings.MaterialRendererType" Scope="User">
+      <Value Profile="(Default)">PostSimulation</Value>
+    </Setting>
+    <Setting Name="PathRendererType" Type="Mill5C.View.Window.Settings.PathRendererType" Scope="User">
+      <Value Profile="(Default)">Standard</Value>
+    </Setting>
+    <Setting Name="MaterialRendererDrawCubes" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,104 @@
+﻿<Window x:Class="Mill5C.View.Window.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:m5cvWPF="clr-namespace:Mill5C.View.Window.Views.WPF"
+    xmlns:m5cvXNA="clr-namespace:Mill5C.View.Window.Views.XNA"
+    Title="Mill5C" Height="600" Width="800" WindowState="Maximized" xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna">
+	<Window.Resources>
+		<Style x:Key="ButtonFocusVisual">
+			<Setter Property="Control.Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Rectangle Stroke="Black" StrokeDashArray="1 2" StrokeThickness="1" Margin="3" SnapsToDevicePixels="true"/>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<LinearGradientBrush x:Key="ButtonNormalBackgroundFill" EndPoint="0.5,1" StartPoint="0.5,0">
+			<GradientStop Color="#FFFFFFFF" Offset="0"/>
+			<GradientStop Color="#FFF3EEDB" Offset="0.9"/>
+		</LinearGradientBrush>
+		<SolidColorBrush x:Key="ButtonBorder" Color="#FF376206"/>
+		<Style x:Key="MenuButtonStyle" TargetType="{x:Type Button}">
+			<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+			<Setter Property="Background" Value="{StaticResource ButtonNormalBackgroundFill}"/>
+			<Setter Property="BorderBrush" Value="{x:Null}"/>
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Microsoft_Windows_Themes:ButtonChrome x:Name="Chrome" SnapsToDevicePixels="true" BorderBrush="{TemplateBinding BorderBrush}" Fill="{TemplateBinding Background}" RenderDefaulted="{TemplateBinding IsDefaulted}" RenderMouseOver="{TemplateBinding IsMouseOver}" RenderPressed="{TemplateBinding IsPressed}" ThemeColor="Homestead">
+							<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" RecognizesAccessKey="True"/>
+						</Microsoft_Windows_Themes:ButtonChrome>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsKeyboardFocused" Value="true">
+								<Setter Property="RenderDefaulted" TargetName="Chrome" Value="true"/>
+							</Trigger>
+							<Trigger Property="ToggleButton.IsChecked" Value="true">
+								<Setter Property="RenderPressed" TargetName="Chrome" Value="true"/>
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="false">
+								<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Window.Resources>
+    <Grid>    
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <Menu x:Name="MainMenu" Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem x:Name="OpenResultsMenuItem" Header="_Open Results" Click="OpenResultsMenuItem_Click"/>
+                <MenuItem x:Name="SaveResultsMenuItem" Header="_Save Results" Click="SaveResultsMenuItem_Click"/>
+                <Separator />
+                <MenuItem x:Name="CloseMenuItem" Header="_Close" Click="CloseMenuItemClickHandler"/>
+            </MenuItem>
+            <MenuItem Header="_Configuration">
+                <MenuItem x:Name="OpenCfgMenuItem" Header="_Open" Click="OpenCfgMenuItem_Click"/>
+                <MenuItem x:Name="SaveCfgMenuItem" Header="_Save" Click="SaveCfgMenuItem_Click"/>
+                <MenuItem x:Name="SimulationWizardMenuItem" Header="_Wizard" Click="SimulationWizardMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="Path" Click="TogglePathDisplayMenuItemClickHandler"/>
+                <MenuItem Header="Material" Click="ToggleMaterialDisplayMenuItemClickHandler"/>
+                <MenuItem Header="Cutter" Click="ToggleCutterDisplayMenuItemClickHandler"/>
+            </MenuItem>
+        </Menu>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+            <Button x:Name="WizardButton" ToolTipService.ToolTip="Wizard" Click="SimulationWizardMenuItem_Click" 
+                    Style="{DynamicResource MenuButtonStyle}" IsEnabled="{Binding Path=Controller.IsWizardEnabled, Mode=OneWay}">
+                <Image Source="/Resources/Wrench.png"/>
+            </Button>
+            <Button x:Name="StartButton" ToolTipService.ToolTip="Start" Click="StartButton_Click" 
+                    Style="{DynamicResource MenuButtonStyle}" IsEnabled="{Binding Path=Controller.IsStartEnabled, Mode=OneWay}">
+                <Image Source="/Resources/OK.png"/>
+            </Button>
+            <Button x:Name="CancelButton" ToolTipService.ToolTip="Cancel" Click="CancelButton_Click" 
+                    Style="{DynamicResource MenuButtonStyle}" IsEnabled="{Binding Path=Controller.IsCancelEnabled, Mode=OneWay}">
+                <Image Source="/Resources/Abort.png"/>
+            </Button>
+            <Button x:Name="ResetButton" ToolTipService.ToolTip="Reset" Click="ResetButton_Click" 
+                    Style="{DynamicResource MenuButtonStyle}" IsEnabled="{Binding Path=Controller.IsResetEnabled, Mode=OneWay}"> 
+                <Image Source="/Resources/Undo.png"/>
+            </Button>
+        </StackPanel>
+        <Grid Grid.Row="2">
+            <!--m5cvWPF:DrawingControl x:Name="DrawingControl" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  /-->
+            <WindowsFormsHost  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <m5cvXNA:RenderingControl x:Name="DrawingControl"/>
+            </WindowsFormsHost>
+        </Grid>
+        <Grid Grid.Row="3" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+            <Label Content="Ready"/>
+        </Grid>
+    </Grid>
+</Window>

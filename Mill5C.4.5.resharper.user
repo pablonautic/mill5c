@@ -1,0 +1,24 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="3115741D-3F69-4582-A07A-7FCDEF10A392/d:Renderers/d:XNA/f:XNARendererFactory.cs" caret="0" fromTop="0" />
+      <File id="3115741D-3F69-4582-A07A-7FCDEF10A392/f:MainWindow.xaml" caret="5965" fromTop="26" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="3115741D-3F69-4582-A07A-7FCDEF10A392/f:MainWindow.xaml" caret="6484" fromTop="32" />
+    </RecentEdits>
+  </RecentFiles>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+</Configuration>

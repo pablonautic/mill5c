@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="Mill5C.View.Window.Views.WPF.DrawingControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p3d="clr-namespace:Primitive3DSurfaces"
+    xmlns:tdt="clr-namespace:_3DTools;assembly=3DTools"
+    xmlns:m5cv="clr-namespace:Mill5C.View.Window.Views.WPF"
+    MinWidth="320" MinHeight="240"
+>
+    <Grid Background="Black">
+        <tdt:TrackballDecorator>
+            <Viewport3D x:Name="viewport3d" Grid.Column="0" Grid.Row="0">
+                <Viewport3D.Camera>
+                    <PerspectiveCamera Position="300,300,300" UpDirection="0,0,1" LookDirection="-1,-1,-1" FieldOfView="45" NearPlaneDistance="0.125"/>
+                </Viewport3D.Camera>
+                <Viewport3D.Children>
+                    <ModelVisual3D x:Name="Scene2">
+
+                        <ModelVisual3D.Transform>
+                            <Transform3DGroup>
+                            </Transform3DGroup>
+                        </ModelVisual3D.Transform>
+
+                        <ModelVisual3D.Content>
+                            <Model3DGroup>
+                                <DirectionalLight Color="White" Direction="0,0,1" />
+                                <DirectionalLight Color="White" Direction="-1,-1,-1" />
+                                <AmbientLight Color="DarkGray" />
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+
+                        <ModelVisual3D.Children>
+
+                            <ModelVisual3D>
+                                <tdt:ScreenSpaceLines3D Color="Red" Thickness="1">
+                                    <tdt:ScreenSpaceLines3D.Points>
+                                        <Point3D X="0" Y="0" Z="0"/>
+                                        <Point3D X="100" Y="0" Z="0"/>
+                                    </tdt:ScreenSpaceLines3D.Points>
+                                </tdt:ScreenSpaceLines3D>
+                                <tdt:ScreenSpaceLines3D Color="Green" Thickness="1">
+                                    <tdt:ScreenSpaceLines3D.Points>
+                                        <Point3D X="0" Y="0" Z="0"/>
+                                        <Point3D X="0" Y="100" Z="0"/>
+                                    </tdt:ScreenSpaceLines3D.Points>
+                                </tdt:ScreenSpaceLines3D>
+                                <tdt:ScreenSpaceLines3D Color="Blue" Thickness="1">
+                                    <tdt:ScreenSpaceLines3D.Points>
+                                        <Point3D X="0" Y="0" Z="0"/>
+                                        <Point3D X="0" Y="0" Z="100"/>
+                                    </tdt:ScreenSpaceLines3D.Points>
+                                </tdt:ScreenSpaceLines3D>
+                            </ModelVisual3D>
+                            
+                        </ModelVisual3D.Children>
+                    </ModelVisual3D>
+                </Viewport3D.Children>
+            </Viewport3D>
+        </tdt:TrackballDecorator>   
+    </Grid>
+</UserControl>
