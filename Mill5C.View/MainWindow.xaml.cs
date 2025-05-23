@@ -21,8 +21,11 @@ using Mill5C.Core.Interpolators;
 using Mill5C.Settings;
 using Microsoft.Win32;
 using Mill5C.View.Window.Controllers;
-using Mill5C.View.Window.Renderers.WPF;
-using Mill5C.View.Window.Renderers.XNA;
+// using Mill5C.View.Window.Renderers.WPF; // Will need to check if WPF renderers are still used
+// using Mill5C.View.Window.Renderers.XNA; // This will eventually need to be replaced by MonoGame renderers
+using Mill5C.View.Window.Renderers.MonoGame; // For MonoGameRendererFactory
+using Mill5C.View.Window.Views.MonoGame; // For Mill5CGameViewModel
+using MonoGame.Forms.DX.Controls; // For MonoGamePanel if explicit typing is needed for DrawingControl field
 
 namespace Mill5C.View.Window
 {
@@ -37,11 +40,23 @@ namespace Mill5C.View.Window
         /// <value>The controller.</value>
         public AppController Controller { get; set; }
 
+        // The DrawingControl field is automatically declared by WPF based on x:Name in MainWindow.xaml.
+        // It will now be of type MonoGame.Forms.DX.Controls.MonoGamePanel.
+        // For example: private MonoGame.Forms.DX.Controls.MonoGamePanel DrawingControl;
+
         public MainWindow()
         {
             InitializeComponent();
-            //Controller = new AppController(this, DrawingControl, new WPFRendererFactory());
-            Controller = new AppController(this, DrawingControl, new XNARendererFactory());
+
+            var gameViewModel = new Mill5CGameViewModel();
+            
+            // Initialize the MonoGamePanel with the ViewModel.
+            // DrawingControl is the x:Name of the MonoGamePanel from XAML.
+            // The .Editor.SetGame() method is the correct way to link them.
+            DrawingControl.Editor.SetGame(gameViewModel);
+
+            // AppController expects an IDrawingView. Mill5CGameViewModel implements IDrawingView.
+            Controller = new AppController(this, gameViewModel, new MonoGameRendererFactory()); // Use MonoGameRendererFactory
 
             DataContext = this;
         }
@@ -94,17 +109,26 @@ namespace Mill5C.View.Window
 
         private void TogglePathDisplayMenuItemClickHandler(object sender, RoutedEventArgs e)
         {
-            DrawingControl.PathRenderer.Visible = !DrawingControl.PathRenderer.Visible;
+            if (Controller?.DrawingView?.PathRenderer != null)
+            {
+                Controller.DrawingView.PathRenderer.Visible = !Controller.DrawingView.PathRenderer.Visible;
+            }
         }
 
         private void ToggleMaterialDisplayMenuItemClickHandler(object sender, RoutedEventArgs e)
         {
-            DrawingControl.MaterialRenderer.Visible = !DrawingControl.MaterialRenderer.Visible;
+            if (Controller?.DrawingView?.MaterialRenderer != null)
+            {
+                Controller.DrawingView.MaterialRenderer.Visible = !Controller.DrawingView.MaterialRenderer.Visible;
+            }
         }
 
         private void ToggleCutterDisplayMenuItemClickHandler(object sender, RoutedEventArgs e)
         {
-            DrawingControl.CutterRenderer.Visible = !DrawingControl.CutterRenderer.Visible;
+            if (Controller?.DrawingView?.CutterRenderer != null)
+            {
+                Controller.DrawingView.CutterRenderer.Visible = !Controller.DrawingView.CutterRenderer.Visible;
+            }
         }
 
     }

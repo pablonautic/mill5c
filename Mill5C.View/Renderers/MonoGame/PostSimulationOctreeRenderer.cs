@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics; // Not strictly needed if base handles all Graphics types
 using Mill5C.Core.Materials;
 using Mill5C.Core.DataStructures;
 using Microsoft.Xna.Framework;
-using InstancedModelSample;
+using InstancedModelSample; // CRITICAL_DEPENDENCY_ALERT
 
-namespace Mill5C.View.Window.Renderers.XNA
+namespace Mill5C.View.Window.Renderers.MonoGame // Changed namespace
 {
-    public class PostSimulationOctreeRenderer : OctreeRendererBase
+    // Ensure it inherits from OctreeRendererBase from the same (MonoGame) namespace
+    public class PostSimulationOctreeRenderer : OctreeRendererBase 
     {
            
         public PostSimulationOctreeRenderer(bool cubes)

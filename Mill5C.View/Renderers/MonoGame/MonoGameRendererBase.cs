@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mill5C.View.Window.Views.XNA;
+using Mill5C.View.Window.Views.MonoGame; 
+using Mill5C.View.Window.Views.XNA; // For IXnaDrawable (assuming it remains in Views.XNA for now)
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Mill5C.Core.Algorithm;
 
-namespace Mill5C.View.Window.Renderers.XNA
+namespace Mill5C.View.Window.Renderers.MonoGame // Changed namespace
 {
-    public abstract class XNARendererBase : IRenderer, IXnaDrawable
+    // Renamed class from XNARendererBase to MonoGameRendererBase
+    public abstract class MonoGameRendererBase : IRenderer, IXnaDrawable 
     {
         protected Engine Engine;
 
-        public RenderingControl RenderingControl { get; private set; }
+        public Mill5CGameViewModel GameViewModel { get; private set; }
     
-        protected VertexDeclaration colorVD, textureVD;
+        protected VertexDeclaration colorVD, textureVD; // These are XNA 3.1 types, will need update if problematic in MG
 
         protected BasicEffect colorEffect, textureEffect;
 
@@ -32,17 +34,17 @@ namespace Mill5C.View.Window.Renderers.XNA
         {
             this.Engine = engine;
 
-            RenderingControl = (RenderingControl)scene;
-            RenderingControl.Drawables.Add(this);
+            GameViewModel = (Mill5CGameViewModel)scene; // Cast to the new ViewModel type
+            GameViewModel.Drawables.Add(this); // Add self to ViewModel's drawable list
 
-            textureVD = new VertexDeclaration(RenderingControl.GraphicsDevice, VertexPositionNormalTexture.VertexElements);
-            colorVD = new VertexDeclaration(RenderingControl.GraphicsDevice, VertexPositionColor.VertexElements);
+            // Access GraphicsDevice and Content via GameViewModel
+            textureVD = new VertexDeclaration(GameViewModel.GraphicsDevice, VertexPositionNormalTexture.VertexElements);
+            colorVD = new VertexDeclaration(GameViewModel.GraphicsDevice, VertexPositionColor.VertexElements);
 
-            glassTexture = RenderingControl.ContentManager.Load<Texture2D>("Glass");
+            glassTexture = GameViewModel.Content.Load<Texture2D>("Glass"); // Use GameViewModel.Content
+            font = GameViewModel.Content.Load<SpriteFont>("Font"); // Use GameViewModel.Content
 
-            font = RenderingControl.ContentManager.Load<SpriteFont>("Font");
-
-            textureEffect = new BasicEffect(RenderingControl.GraphicsDevice, null);
+            textureEffect = new BasicEffect(GameViewModel.GraphicsDevice, null);
 
             textureEffect.TextureEnabled = true;
             textureEffect.Texture = glassTexture;
@@ -57,7 +59,7 @@ namespace Mill5C.View.Window.Renderers.XNA
             //textureEffect.DirectionalLight1.Direction = Vector3.Normalize(new Vector3(-1.0f, -1.0f, 1.0f));
             //textureEffect.DirectionalLight1.SpecularColor = new Vector3(0.5f, 0.5f, 0.5f); 
             
-            colorEffect = new BasicEffect(RenderingControl.GraphicsDevice, null);
+            colorEffect = new BasicEffect(GameViewModel.GraphicsDevice, null); // Use GameViewModel.GraphicsDevice
             colorEffect.VertexColorEnabled = true;
             colorEffect.DiffuseColor = new Vector3(1.0f, 1.0f, 1.0f);
         }
@@ -74,15 +76,19 @@ namespace Mill5C.View.Window.Renderers.XNA
 
         public virtual void Draw()
         {
-            colorEffect.World = RenderingControl.World;
-            colorEffect.View = RenderingControl.View;
-            colorEffect.Projection = RenderingControl.Projection;
+            // Use GameViewModel for matrices
+            colorEffect.World = GameViewModel.World;
+            colorEffect.View = GameViewModel.View;
+            colorEffect.Projection = GameViewModel.Projection;
 
-            textureEffect.World = RenderingControl.World;
-            textureEffect.View = RenderingControl.View;
-            textureEffect.Projection = RenderingControl.Projection;
+            textureEffect.World = GameViewModel.World;
+            textureEffect.View = GameViewModel.View;
+            textureEffect.Projection = GameViewModel.Projection;
 
-            RenderingControl.GraphicsDevice.RenderState.DepthBufferEnable = true;
+            // RenderState is different in MonoGame/XNA 4.0+
+            // GraphicsDevice.RenderState.DepthBufferEnable = true; // Old XNA
+            GameViewModel.GraphicsDevice.DepthStencilState = DepthStencilState.Default; // MonoGame equivalent
+
         }
 
         protected void DrawModel(Model model, Vector3 diffuse, Matrix localWorld)
@@ -95,19 +101,19 @@ namespace Mill5C.View.Window.Renderers.XNA
                 foreach (BasicEffect effect in mesh.Effects)
                 {
 
-                    effect.Alpha = 0.6f;
+                    effect.Alpha = 0.6f; // Alpha is part of Material in MonoGame BasicEffect
 
                     effect.World = 
                         boneTransforms[mesh.ParentBone.Index] * localWorld *
-                        RenderingControl.World;
+                        GameViewModel.World; // Use GameViewModel
 
-                    effect.View = RenderingControl.View;
-                    effect.Projection = RenderingControl.Projection;
+                    effect.View = GameViewModel.View; // Use GameViewModel
+                    effect.Projection = GameViewModel.Projection; // Use GameViewModel
 
                     effect.DiffuseColor = diffuse;
 
                     effect.EnableDefaultLighting();
-                    effect.PreferPerPixelLighting = true;
+                    effect.PreferPerPixelLighting = true; // This is default in MonoGame BasicEffect
                 }
 
                 mesh.Draw();

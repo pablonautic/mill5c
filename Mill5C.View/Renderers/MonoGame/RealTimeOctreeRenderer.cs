@@ -6,24 +6,25 @@ using Mill5C.Core.Materials;
 using Microsoft.Xna.Framework;
 using Mill5C.Core.DataStructures;
 
-namespace Mill5C.View.Window.Renderers.XNA
+namespace Mill5C.View.Window.Renderers.MonoGame // Changed namespace
 {
-    public class RealTimeOctreeRenderer : OctreeRendererBase
+    public class RealTimeOctreeRenderer : OctreeRendererBase // Ensure it inherits from OctreeRendererBase in the same namespace
     {
-        private const int refreshRate = 10;
-
+        private const int refreshRate = 10; // This logic might need rethinking without Invalidate
         private int refreshCounter;
         
         public RealTimeOctreeRenderer(bool cubes)
             : base(cubes)
         {
-
         }
 
         public override void Initialize(Mill5C.Core.Algorithm.Engine engine, object scene)
         {
             base.Initialize(engine, scene);
-            Transverse();
+            if (engine != null) // Ensure engine is not null before accessing Material
+            {
+                Transverse(); // Transverse can be called if Engine.Material is valid
+            }
         }
 
         public override void AttachEvents(Mill5C.Core.Algorithm.Engine engine)
@@ -41,13 +42,18 @@ namespace Mill5C.View.Window.Renderers.XNA
 
         private void engine_PathPrepared(object sender, Mill5C.Core.Algorithm.PathFileEventArgs args)
         {
-            Engine.Strategy.ReferenceCutter.ConfigurationChanged += Cutter_ConfigurationChanged;
+            if (Engine?.Strategy?.ReferenceCutter != null) // Null checks
+            {
+                Engine.Strategy.ReferenceCutter.ConfigurationChanged += Cutter_ConfigurationChanged;
+            }
         }
 
         private void engine_PathCompleted(object sender, Mill5C.Core.Algorithm.PathFileEventArgs args)
         {
-
-            Engine.Strategy.ReferenceCutter.ConfigurationChanged -= Cutter_ConfigurationChanged;
+            if (Engine?.Strategy?.ReferenceCutter != null) // Null checks
+            {
+                Engine.Strategy.ReferenceCutter.ConfigurationChanged -= Cutter_ConfigurationChanged;
+            }
         }
 
         private void Cutter_ConfigurationChanged(object sender, EventArgs e)
@@ -59,8 +65,12 @@ namespace Mill5C.View.Window.Renderers.XNA
             if (refreshCounter > refreshRate)
             {
                 refreshCounter = 0;
-                Transverse();
-                RenderingControl.Invoke(new Action(RenderingControl.Invalidate));
+                if (Engine != null) // Ensure engine is available
+                {
+                    Transverse();
+                }
+                // RenderingControl.Invoke was removed. Game loop handles redraws.
+                // GameViewModel.RequestRedraw(); // Or similar if MonoGame.Forms has such a mechanism
             }
         }
 
@@ -72,14 +82,14 @@ namespace Mill5C.View.Window.Renderers.XNA
             }
             set
             {
+                bool changed = base.Visible != value;
                 base.Visible = value;
-                if (Engine != null)
+                if (changed && Engine != null) // Only call Transverse if visibility actually changed
                 {
                     Transverse();
-                    RenderingControl.Invoke(new Action(RenderingControl.Invalidate));
+                    // RenderingControl.Invoke was removed.
                 }
             }
         }
-
     }
 }

@@ -1,0 +1,36 @@
+#----------------------------- Global Properties ----------------------------#
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/platform:Windows
+/config:
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+#---------------------------------- Content ---------------------------------#
+
+# Models
+# For XNB files, MGCB will copy them to the output directory if /action:Build or /action:Copy is used.
+# If the original source files (e.g., .fbx) were available, those would be listed.
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Cats.xnb
+/build:Cylinder.xnb
+/build:InstancedModel.xnb
+/build:SphereHighPoly.xnb
+/build:cat_0.xnb
+/build:pawball_0.xnb
+/build:sphere.xnb
+
+# Textures
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Glass.xnb
+
+# Fonts
+# For a .spritefont source, this would be correct. For a precompiled .xnb font, 
+# MGCB will copy it.
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Font.xnb

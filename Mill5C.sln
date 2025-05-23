@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29324.140
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 17.0.31903.59
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mill5C.View.Window", "Mill5C.View\Mill5C.View.Window.csproj", "{3115741D-3F69-4582-A07A-7FCDEF10A392}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mill5C.Core", "Mill5C.Core\Mill5C.Core.csproj", "{7D544CA2-C732-4D56-BD24-561899B3C55C}"
