@@ -1,0 +1,17 @@
+{
+  "name": "mill5c-web",
+  "version": "0.1.0",
+  "description": "A web-based 5-axis milling simulator using Three.js",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "echo 'Run a simple HTTP server in mill5c-web directory to view index.html'"
+  },
+  "devDependencies": {
+    "@types/three": "^0.176.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}
