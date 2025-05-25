@@ -8,8 +8,8 @@ export class OctreeVisualizer {
     private octreeMeshGroup: THREE.Group; // Group to hold all octree node meshes
 
     // Define materials for different node colors
-    private solidMaterial = new THREE.MeshLambertMaterial({ color: 0x0077ff }); // Blue
-    private partialMaterial = new THREE.MeshLambertMaterial({ color: 0xffdd00, transparent: true, opacity: 0.7 }); // Yellow, semi-transparent
+    private solidMaterial = new THREE.MeshLambertMaterial({ color: 0x777777 }); // Medium gray
+    private partialMaterial = new THREE.MeshLambertMaterial({ color: 0xffaa00, transparent: true, opacity: 0.6 }); // Orange, slightly more transparent
 
     constructor(scene: THREE.Scene) {
         this.scene = scene;

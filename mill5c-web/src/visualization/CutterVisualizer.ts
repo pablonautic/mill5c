@@ -6,8 +6,9 @@ export class CutterVisualizer {
     private scene: THREE.Scene;
     private cutterMeshGroup: THREE.Group;
     
-    private cylinderMaterial = new THREE.MeshPhongMaterial({ color: 0x888888, specular: 0x111111, shininess: 50 });
-    private sphereMaterial = new THREE.MeshPhongMaterial({ color: 0x888888, specular: 0x111111, shininess: 50 });
+    private sharedCutterMaterial = new THREE.MeshPhongMaterial({ color: 0xA0A0A0, specular: 0x888888, shininess: 60 });
+    // private cylinderMaterial = new THREE.MeshPhongMaterial({ color: 0xA0A0A0, specular: 0x888888, shininess: 60 });
+    // private sphereMaterial = new THREE.MeshPhongMaterial({ color: 0xA0A0A0, specular: 0x888888, shininess: 60 });
 
     // Store current parameters to detect changes
     private currentCutterParams: { radius: number, height: number, type: CutterType } | null = null;
@@ -70,7 +71,7 @@ export class CutterVisualizer {
 
         // Cylinder part (shaft)
         this.cylinderGeom = new THREE.CylinderGeometry(cutter.radius, cutter.radius, cutter.height, 32);
-        this.cylinderMesh = new THREE.Mesh(this.cylinderGeom, this.cylinderMaterial);
+        this.cylinderMesh = new THREE.Mesh(this.cylinderGeom, this.sharedCutterMaterial); // Use shared material
         this.cutterMeshGroup.add(this.cylinderMesh);
 
         if (cutter.type === CutterType.Ball) {
@@ -80,7 +81,7 @@ export class CutterVisualizer {
                 this.sphereGeom = new THREE.SphereGeometry(cutter.radius, 32, 16);
             }
             if (!this.sphereMesh) { // Create mesh if it doesn't exist
-                this.sphereMesh = new THREE.Mesh(this.sphereGeom, this.sphereMaterial);
+                this.sphereMesh = new THREE.Mesh(this.sphereGeom, this.sharedCutterMaterial); // Use shared material
                 this.cutterMeshGroup.add(this.sphereMesh);
             }
             this.sphereMesh.visible = true;
@@ -117,7 +118,8 @@ export class CutterVisualizer {
     }
 
     public disposeMaterials(): void {
-        this.cylinderMaterial.dispose();
-        this.sphereMaterial.dispose();
+        this.sharedCutterMaterial.dispose();
+        // this.cylinderMaterial.dispose(); // No longer separate
+        // this.sphereMaterial.dispose(); // No longer separate
     }
 }
